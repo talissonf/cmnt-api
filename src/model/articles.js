@@ -16,7 +16,7 @@ let schema = {
   },
   body: {
     type: String,
-    require: 'article body is required.'
+    required: 'article body is required.'
   },
   html: {
     type: String
@@ -39,7 +39,7 @@ let schema = {
   taxonomies: {
     categories: {
       type: Array,
-      require: 'article category no found.'
+      required: 'article category no found.'
     },
     tags: {
       type: Array
@@ -55,7 +55,7 @@ let schema = {
   },
   slug: {
     type: String,
-    required: false
+    required: true
   },
   updated_at: {
     type: Date,

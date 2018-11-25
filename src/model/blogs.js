@@ -43,7 +43,8 @@ let schema = {
   },
   slug: {
     type: String,
-    required: false
+    required: 'Slug name is riquired',
+    unique: true
   },
   updated_at: {
     type: Date,

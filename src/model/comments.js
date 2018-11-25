@@ -8,14 +8,16 @@ let schema = {
   },
   user: {
     id: {
-      type: String
+      type: String,
+      required: 'user id is riquired'
     },
     name: {
       type: String
     }
   },
   body: {
-    type: String
+    type: String,
+    required: 'body of comment is riquired.'
   },
   updated_at: {
     type: Date,
