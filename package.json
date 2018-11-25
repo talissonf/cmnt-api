@@ -9,6 +9,7 @@
   "author": "Talisson Ferreira <talissonf@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "jwt-simple": "^0.5.5",
