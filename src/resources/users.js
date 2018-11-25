@@ -37,7 +37,7 @@ module.exports = {
         return response.send(JSON.stringify({ erro: 'User not found.' }))
       }
       response.status(200)
-      return response.json(user)
+      return response.send(user)
     })
   },
   getAll: (request, response) => {
