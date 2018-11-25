@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const MongoSchema = mongoose.Schema
 const bcrypt = require('bcrypt-nodejs')
 
+// valida e-mail
 const validateEmail = (email) => {
   let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   return re.test(email)
 }
-
+// Esquema da coleção de usuários no mongo
+// nome, tipo, obrigatório ?, validação?
 let schema = {
   created_at: {
     type: Date,
@@ -56,9 +58,9 @@ let schema = {
     default: Date.now
   }
 }
-
+// instância do mongo schema
 let modelSchema = new MongoSchema(schema)
-
+// cria hash bcrypt para a senha antes de salvar na coleção
 const hashIsValid = (next) => {
   let user = this
 
@@ -79,8 +81,11 @@ const hashIsValid = (next) => {
     })
   })
 }
-
+// registra a função no schema
 modelSchema.pre('save', hashIsValid)
+// registra metodo para verifica se 
+// se a senha informada no login bate com
+// a que tem no mongo
 modelSchema.methods.checkHash = (hash, next) => {
   bcrypt.compare(hash, this.hash, (err, isMatch) => {
     if (err) {
@@ -89,5 +94,5 @@ modelSchema.methods.checkHash = (hash, next) => {
     next(isMatch)
   })
 }
-
+// exporta o módulo
 module.exports = mongoose.model('users', modelSchema)
