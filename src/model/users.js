@@ -59,7 +59,7 @@ let schema = {
 
 let modelSchema = new MongoSchema(schema)
 
-const hashIsValid = (hash, next) => {
+const hashIsValid = (next) => {
   let user = this
 
   if (!user.isModified('hash')) {
@@ -68,11 +68,11 @@ const hashIsValid = (hash, next) => {
 
   bcrypt.genSalt(5, (err, salt) => {
     if (err) {
-      return next()
+      return next(err)
     }
     bcrypt.hash(user.hash, salt, null, (erro, pass) => {
       if (err) {
-        return next()
+        return next(err)
       }
       user.hash = pass
       next()
