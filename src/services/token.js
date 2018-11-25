@@ -32,18 +32,17 @@ const tokenIsValid = (request, response, next) => {
         // se houver seta o usuário na requisição
         request.user = user
         // chama próxima função do express
-        return next()
       })
-
+      return next()
     } catch (error) {
       response.status(401)
-      return response.json(JSON.stringify({ erro: 'Token invalidérrimo. Refaça login.' }))
+      return response.send(JSON.stringify({ erro: 'Token invalidérrimo. Refaça login.' }))
     }
   }
   // se o token não for informado
   // retorna erro
   response.status(401)
-  return response.send(JSON.stringify({ erro: 'Token not found.' }))
+  response.end(JSON.stringify({ erro: 'Token not found.' }))
 }
 // exporta o middleware como módulo
 module.exports = tokenIsValid
