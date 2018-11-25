@@ -6,7 +6,7 @@ const MongoClient = require('mongoose')
 
 MongoClient.connect('mongodb://localhost:27017/cmnt', (err, db) => {
   if (err) {
-    return console.log(err)
+    console.log(err)
   }
 })
 
