@@ -9,7 +9,8 @@ const validateEmail = (email) => {
 }
 // Esquema da coleção de usuários no mongo
 // nome, tipo, obrigatório ?, validação?
-let schema = {
+// instância do mongo schema
+let userSchema = new MongoSchema({
   created_at: {
     type: Date,
     default: Date.now
@@ -30,23 +31,26 @@ let schema = {
   },
   hash: {
     type: String,
-    required: 'Passwood is required'
+    required: 'Password is required'
   },
   birthdate: {
     year: {
       type: Number,
       min: 1900,
-      max: 2020
+      max: 2020,
+      required: 'birthdate.year is invalid '
     },
     month: {
       type: Number,
       min: 1,
-      max: 12
+      max: 12,
+      required: 'birthdate.month is invalid '
     },
     day: {
       type: Number,
       min: 1,
-      max: 31
+      max: 31,
+      required: 'birthdate.day is invalid '
     }
   },
   slug: {
@@ -57,11 +61,10 @@ let schema = {
     type: Date,
     default: Date.now
   }
-}
-// instância do mongo schema
-let modelSchema = new MongoSchema(schema)
+})
 // cria hash bcrypt para a senha antes de salvar na coleção
-const hashIsValid = (next) => {
+// registra a função no schema
+userSchema.pre('save', function (next) {
   let user = this
 
   if (!user.isModified('hash')) {
@@ -80,13 +83,11 @@ const hashIsValid = (next) => {
       next()
     })
   })
-}
-// registra a função no schema
-modelSchema.pre('save', hashIsValid)
-// registra metodo para verifica se 
+})
+// registra metodo para verifica se
 // se a senha informada no login bate com
 // a que tem no mongo
-modelSchema.methods.checkHash = (hash, next) => {
+userSchema.methods.checkHash = (hash, next) => {
   bcrypt.compare(hash, this.hash, (err, isMatch) => {
     if (err) {
       return next(err)
@@ -95,4 +96,4 @@ modelSchema.methods.checkHash = (hash, next) => {
   })
 }
 // exporta o módulo
-module.exports = mongoose.model('users', modelSchema)
+module.exports = mongoose.model('users', userSchema)
