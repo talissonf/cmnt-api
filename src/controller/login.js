@@ -1,20 +1,19 @@
-const User = require('./../model/users') // Model usuários
+const model = require('./../model/users') // Model usuários
 const JWT = require('jwt-simple') // JWT 
 const moment = require('moment') // moment
 const SECRET = 'Wc7KtlMRm3ixpG7N1S5a0SrmRE4lTHu0ALTuCTBrAr64YIvxmiD8gX7TGcCN8QH' // segredo para gerar token
 
 // realiza login
 const login = (request, response) => { // instâncias request, response são passadas através do express quando o login é solicitado no resource
-  let email = request.body.email || '' // pega email do body da requisição ou seta como vazio
+  let mail = request.body.email || '' // pega email do request.body da requisição ou seta como vazio
   let hash = request.body.hash || '' // pega senha do body da requisição ou seta como vazio
-
   // se o body for vazio retorna erro 401
-  if (email === '' || hash === '') {
+  if (mail === '' || hash === '') {
     response.status(401) // não autorizado
     return response.send(JSON.stringify({ erro: 'Email or Hash is empty' })) // envia mensagem de erro
   }
   // se houve body busca o usuário no mongo através do e-mail informado
-  User.findOne({ email: email }, ((err, user) => {
+  model.findOne({ email: mail }, function (err, user) {
     if (err) { // se não houve usuário 
       response.status(401) // não autorizado
       return response.send(JSON.stringify({ erro: 'User not found.' })) // messagem de erro
@@ -34,7 +33,7 @@ const login = (request, response) => { // instâncias request, response são pas
         exp: expires // validade do token
       }, SECRET) // segredo para criação do token
       // token gerado e enviado 
-      return response.json({ 
+      return response.json({
         token: token,
         expires: expires,
         user: user.toJson()
@@ -42,3 +41,5 @@ const login = (request, response) => { // instâncias request, response são pas
     })
   })
 }
+
+module.exports = login
